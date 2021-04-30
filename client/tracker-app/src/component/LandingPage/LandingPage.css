@@ -1,0 +1,40 @@
+.mainContainer{
+    width: 100%;
+    height: 100vh;
+    margin-top: 20px;
+}
+
+.mainContainer h3{
+    margin-top: 60px;
+    margin-left: 40px;
+}
+
+.listContainer ul{
+    width: 70%;
+    margin-top: 14px;
+    list-style: none;
+}
+
+.listContainer ul li{
+    color: #5840bb;
+    font-weight: bold;
+    font-size: 17px;
+    cursor: pointer;
+    padding: 10px 7px 10px 7px;
+    border-bottom: 1px solid #858686;
+    border-left: 1px solid #858686;
+    border-right: 1px solid #858686;
+}
+
+.listContainer ul li:first-child{
+    border-top: 1px solid #858686;
+}
+
+.img{
+    width: 50%;
+    height: 30vh;
+}
+
+.cardData{
+    display: flex;
+}
