@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/Product", {
+mongoose.connect("mongodb://localhost:27017/E-commerce", {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
 }).then(() => {
     console.log("Connected Successfully");
 }).catch((err) => {

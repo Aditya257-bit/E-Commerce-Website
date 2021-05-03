@@ -1,37 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const Category = ({setCategory}) => {
-
-    const [details, setDetails] = useState([
-        {categoryId: ""},
-        {categoryName: ""}
-    ]);
+const Category = ({ setInputList, addCategories, inputList}) => {
 
     const handleChange = (e) => {
-        setDetails({...details, [e.target.id]: e.target.value})
+        setInputList((oldValue) => {
+            return(
+                {...oldValue, [e.target.name] : e.target.value}
+            )
+        });
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setCategory(details);
-        // console.log(details);
-    }
-    
+        addCategories();
+    };
+
+
     return (
-        <div className="mx-5 mt-5 w-50">
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>Category ID :-</label>
-                    <input type="text" className="form-control" id="categoryId" onChange={handleChange}  placeholder="Enter category id"/>
-                </div>
-                <div class="form-group">
-                    <label>Category Name :-</label>
-                    <input type="text" className="form-control" id="categoryName" onChange={handleChange} placeholder="Category name"/>
-                </div>
-                <button type="submit" className="btn btn-primary">Add Category</button>
-            </form>
+        <div>
+            <div className="mx-5 mt-5 w-50">
+                <form onSubmit={handleSubmit}>
+                    <div class="form-group">
+                        <label>Category Name :-</label>
+                        <input type="text" className="form-control" name="categoryName" onChange={handleChange} placeholder="Category name"/>
+                    </div>
+                    <button type="submit" className="btn btn-primary">Add Category</button>
+                </form>
+            </div>
         </div>
     )
 }
 
-export default Category;
+export default Category

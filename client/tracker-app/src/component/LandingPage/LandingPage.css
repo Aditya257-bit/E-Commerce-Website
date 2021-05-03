@@ -24,6 +24,12 @@
     border-bottom: 1px solid #858686;
     border-left: 1px solid #858686;
     border-right: 1px solid #858686;
+    display: flex;
+    justify-content: space-between;
+}
+
+.listContainer ul li .pencil{
+    text-align: right;
 }
 
 .listContainer ul li:first-child{
