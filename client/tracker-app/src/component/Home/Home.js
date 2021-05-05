@@ -22,7 +22,7 @@ const Home = () => {
     const [inputList, setInputList] = useState({
         categoryName: ""
     });
-    const size = 5;
+    const size = 8;
     const [total, setTotal] = useState();
     const [product, setProduct] = useState([]);
     const [productInput, setProductInput] = useState({
@@ -94,10 +94,13 @@ const Home = () => {
 
     //Getting Product
 
+    const [fetchingData, setFetchingData] = useState([]);
+
     const getProduct = async () => {
         const productData = await axios.get(`/getProduct?page=${pageNumber}&size=${size}`);
         setProduct(productData.data.result);
         setTotal(productData.data.totalPage);
+        setFetchingData(productData.data.fetchData);
     }
 
 
@@ -191,8 +194,9 @@ const Home = () => {
 
     const productDisplay = (item) => {        
         let categoryItem = item.categoryName;
+        console.log(categoryItem);
 
-        let tempProductDisplay = product.filter((values) => {
+        let tempProductDisplay = fetchingData.filter((values) => {
             if(values.categoryName === categoryItem){
                 return values;
             }
@@ -208,7 +212,7 @@ const Home = () => {
             <Navbar />
             <Switch>
                 <Route exact path="/">
-                    <LandingPage  pagination={pagination} newData={newData} productDisplay={productDisplay} switchUpdateProduct={switchUpdateProduct} switchUpdateCategory={switchUpdateCategory} getProduct={getProduct} deleteProduct={deleteProduct} deleteCategory={deleteCategory} product={product} category={category} />
+                    <LandingPage pagination={pagination} newData={newData} productDisplay={productDisplay} switchUpdateProduct={switchUpdateProduct} switchUpdateCategory={switchUpdateCategory} getProduct={getProduct} deleteProduct={deleteProduct} deleteCategory={deleteCategory} product={product} category={category} />
                 </Route>
                 <Route exact path="/category">
                     <Category inputList={inputList} addCategories={addCategories} category={category} setCategory={setCategory} setInputList={setInputList} inputList={inputList} />

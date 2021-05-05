@@ -148,18 +148,20 @@ app.get("/getProduct", async (req, res) => {
             page = 1;
         }
         if (!size) {
-            size = 5;
+            size = 4;
         }
 
         const limit = parseInt(size);
         const skip = (page - 1) * size;
         const total = await ProductModel.countDocuments({});
         // console.log(total);
+        const fetchData = await ProductModel.find();
 
         const productData = await ProductModel.find().limit(limit).skip(skip);
         res.status(200).json({
             totalPage: total,
-            result: productData
+            result: productData,
+            fetchData: fetchData
         });
 
     }
