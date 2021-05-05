@@ -32,15 +32,6 @@ const productSchema = new mongoose.Schema({
     },
     productName: {
         type: String
-    },
-    productPrice: {
-        type: String
-    },
-    productDescription: {
-        type: String
-    },
-    productImage: {
-        type: String
     }
 });
 
@@ -65,13 +56,13 @@ const ProductModel = new mongoose.model("productmodel", productSchema);
 //     }
 // }
 
-// const upload = multer({storage: storage, fileFilter: fileFilter})
+// const upload = multer({storage: storage, fileFilter: fileFilter});
 
 
 app.post("/addCategory", async (req, res) => {
     try {
         const categoryData = new CategoryModel({
-            categoryName: req.body.categoryName 
+            categoryName: req.body.categoryName
         })
 
         const saveData = await categoryData.save();
@@ -85,28 +76,38 @@ app.post("/addCategory", async (req, res) => {
 })
 
 app.get("/getCategory", async (req, res) => {
-    try{
+    try {
         const data = await CategoryModel.find();
         res.status(200).json(data);
     }
-    catch(error){
+    catch (error) {
         console.log(error)
     }
 })
 
 app.delete("/deleteCategory", async (req, res) => {
-    try {
-        const deleteData = await CategoryModel.deleteOne({_id: req.body.id});
-        res.status(200).send("success");
-        console.log(deleteData);
-    } catch (error) {
-        res.status(400).send(error);
+
+    const _id = req.body.id;
+    const categoryName = req.body.categoryName;
+
+    console.log(_id);
+    console.log(categoryName);
+
+    try{
+        const deleteData = await CategoryModel.deleteOne({_id:_id});
+        const deleteMany = await ProductModel.deleteMany({categoryName: categoryName});
+        res.json("success");
+        // console.log(deleteData);
+        // console.log(deleteMany);
+    }   
+    catch(error){
+        res.status(200).send(error)
     }
 })
 
 app.put("/updateCategory", async (req, res) => {
     try {
-        const updateData = await CategoryModel.updateOne({_id: req.body._id}, {categoryName: req.body.categoryName}, {returnOriginal: false});
+        const updateData = await CategoryModel.updateOne({ _id: req.body._id }, { categoryName: req.body.categoryName }, { returnOriginal: false });
         res.status(200).send(updateData);
         console.log(updateData);
     } catch (error) {
@@ -121,10 +122,7 @@ app.post("/addProduct", async (req, res) => {
             categoryId: req.body.categoryId,
             categoryName: req.body.categoryName,
             productId: req.body.productId,
-            productName: req.body.productName,
-            productPrice: req.body.productPrice,
-            productDescription: req.body.productDescription,
-            productImage: req.file.productImage
+            productName: req.body.productName
         })
 
         const saveData = await productData.save();
@@ -139,25 +137,40 @@ app.post("/addProduct", async (req, res) => {
 
 app.get("/getProduct", async (req, res) => {
 
-    try{
+    // console.log(req.query.page);
+    // console.log(req.query.size);
 
-        const page_size = 10;
-        const page = parseInt(req.query.page || "0");
+    try {
 
+        let { page, size } = req.query;
+
+        if (!page) {
+            page = 1;
+        }
+        if (!size) {
+            size = 5;
+        }
+
+        const limit = parseInt(size);
+        const skip = (page - 1) * size;
         const total = await ProductModel.countDocuments({});
-        const totalPages = Math.ceil(total / page_size)
-        const productData = await ProductModel.find().limit(page_size).skip(page_size * page);
-        res.status(200).json(productData);
+        // console.log(total);
+
+        const productData = await ProductModel.find().limit(limit).skip(skip);
+        res.status(200).json({
+            totalPage: total,
+            result: productData
+        });
 
     }
-    catch(error){
+    catch (error) {
         console.log(error)
     }
 })
 
 app.delete("/deleteProduct", async (req, res) => {
     try {
-        const deleteProduct = await ProductModel.deleteOne({_id: req.body.id});
+        const deleteProduct = await ProductModel.deleteOne({ _id: req.body.id });
         res.status(200).send("success");
         console.log(deleteProduct);
     } catch (error) {
@@ -167,10 +180,10 @@ app.delete("/deleteProduct", async (req, res) => {
 
 app.put("/updateProduct", async (req, res) => {
     try {
-        const updateProduct = await ProductModel.updateOne({_id: req.body._id}, {
+        const updateProduct = await ProductModel.updateOne({ _id: req.body._id }, {
             categoryName: req.body.categoryName,
             productName: req.body.productName
-        }, {returnOriginal: false});
+        }, { returnOriginal: false });
 
         res.status(200).json(updateProduct);
         console.log(updateProduct);

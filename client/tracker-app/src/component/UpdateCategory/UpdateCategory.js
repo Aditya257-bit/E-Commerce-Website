@@ -1,6 +1,6 @@
 import React from 'react'
 
-const UpdateCategory = ({updateCategory, setUpdateCategoryInput}) => {
+const UpdateCategory = ({updateCategory, updateCategoryInput, setUpdateCategoryInput}) => {
 
     const handleChange = (e) => {
         setUpdateCategoryInput(e.target.value);
@@ -9,6 +9,7 @@ const UpdateCategory = ({updateCategory, setUpdateCategoryInput}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         updateCategory();
+        setUpdateCategoryInput("");
     }
 
     return (
@@ -18,7 +19,7 @@ const UpdateCategory = ({updateCategory, setUpdateCategoryInput}) => {
                     <form onSubmit={handleSubmit}>
                         <div class="form-group">
                             <label>Category Name :-</label>
-                            <input type="text" className="form-control" name="categoryName" onChange={handleChange} placeholder="Category name"/>
+                            <input type="text" value={updateCategoryInput} className="form-control" name="categoryName" onChange={handleChange} placeholder="Category name"/>
                         </div>
                         <button type="submit" className="btn btn-primary">Update Category</button>
                     </form>

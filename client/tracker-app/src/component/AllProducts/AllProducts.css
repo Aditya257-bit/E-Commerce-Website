@@ -1,10 +1,12 @@
-.product{
-    display: flex;
-    flex-wrap: wrap;
-    /* justify-content: space-evenly; */
-}
 
-.product .card{
+.card{
+    display: flex;
     margin: 7px 7px;
     box-shadow: 0 4px 8px 0 #999;
+    border: none;
+}
+
+.product .style{
+    display: flex;
+    flex-wrap: wrap;
 }

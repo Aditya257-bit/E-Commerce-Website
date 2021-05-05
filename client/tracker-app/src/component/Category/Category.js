@@ -13,6 +13,7 @@ const Category = ({ setInputList, addCategories, inputList}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         addCategories();
+        setInputList({categoryName: ""});
     };
 
 
@@ -22,7 +23,7 @@ const Category = ({ setInputList, addCategories, inputList}) => {
                 <form onSubmit={handleSubmit}>
                     <div class="form-group">
                         <label>Category Name :-</label>
-                        <input type="text" className="form-control" name="categoryName" onChange={handleChange} placeholder="Category name"/>
+                        <input type="text" value={inputList.categoryName} className="form-control" name="categoryName" onChange={handleChange} placeholder="Category name"/>
                     </div>
                     <button type="submit" className="btn btn-primary">Add Category</button>
                 </form>

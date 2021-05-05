@@ -5,7 +5,7 @@ const Navbar = () => {
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <NavLink className="navbar-brand" to="/">Home</NavLink>
+            <NavLink className="navbar-brand" to="/"><span style={{color: "#ffc107", fontWeight: "600",fontSize: "1.5rem",boxShadow: "0 2px 8px 0 #8e7e4e",padding: "13px"}}>AK</span></NavLink>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>
@@ -19,10 +19,6 @@ const Navbar = () => {
                         <NavLink className="nav-link" to="product">Products</NavLink>
                     </li>
                     </ul>
-                    <form className="form-inline my-2 my-lg-0">
-                    <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>
                 </div>
             </nav>
         </div>

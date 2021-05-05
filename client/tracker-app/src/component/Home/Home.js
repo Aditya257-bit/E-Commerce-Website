@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, NavLink } from "react-router-dom";
 import axios from "axios";
 
 import LandingPage from "../LandingPage/LandingPage";
@@ -12,28 +12,34 @@ import UpdateProduct from "../UpdateProduct/UpdateProduct";
 const Home = () => {
 
     const [itemData, setItemData] = useState([]);
-    // const[pageNumber, setPageNumber] = useState(0);
-    const [updateCategoryInput, setUpdateCategoryInput] = useState({});
-    const [updateProductInput, setUpdateProductInput] = useState({});
+    const [pageNumber, setPageNumber] = useState(1);
+    const [updateCategoryInput, setUpdateCategoryInput] = useState();
+    const [updateProductInput, setUpdateProductInput] = useState({
+        categoryName: "",
+        productName: ""
+    });
     const [category, setCategory] = useState([]);
     const [inputList, setInputList] = useState({
         categoryName: ""
     });
+    const size = 5;
+    const [total, setTotal] = useState();
     const [product, setProduct] = useState([]);
     const [productInput, setProductInput] = useState({
         categoryId: "",
         categoryName: "",
         productId: "",
-        productName: "",
-        productPrice: "",
-        productDescription: "",
-        productImage: ""
+        productName: ""
     });
 
     useEffect(() => {
         getProduct();
         getCategory();
     }, []);
+
+    useEffect(() => {
+        getProduct();
+    }, [pageNumber]);
 
     useEffect(() => {
         let temp = [];
@@ -49,15 +55,15 @@ const Home = () => {
         if (itemData.includes(inputList.categoryName)) {
             alert("Category Name already present")
         }
+        else if(inputList.categoryName === ""){
+            alert("Category Name is required")
+        }
         else {
             const Categories = {
                 categoryName: inputList.categoryName
             }
             axios.post("/addCategory", Categories)
         }
-        setInputList({
-            categoryName: ""
-        })
         getCategory();
     }
 
@@ -70,46 +76,41 @@ const Home = () => {
     //Adding Product
     const addProduct = () => {
 
-        const products = {
-            categoryId: productInput.categoryId,
-            categoryName: productInput.categoryName,
-            productId: productInput.productId,
-            productName: productInput.productName,
-            productPrice: productInput.productPrice,
-            productDescription: productInput.productDescription,
-            productImage: productInput.productImage
+        if(productInput.categoryName === ""){
+            alert("All fields are required");
         }
-
-        axios.post("/addProduct", products);
-
-        setProductInput({
-            categoryId: "",
-            categoryName: "",
-            productId: "",
-            productName: "",
-            productPrice: "",
-            productDescription: "",
-            productImage: ""
-        })
+        else{
+            const products = {
+                categoryId: productInput.categoryId,
+                categoryName: productInput.categoryName,
+                productId: productInput.productId,
+                productName: productInput.productName
+            }
+    
+            axios.post("/addProduct", products);
+        }
         getProduct();
     }
 
     //Getting Product
 
     const getProduct = async () => {
-        const productData = await axios.get("/getProduct");
-        setProduct(productData.data);
+        const productData = await axios.get(`/getProduct?page=${pageNumber}&size=${size}`);
+        setProduct(productData.data.result);
+        setTotal(productData.data.totalPage);
     }
 
 
     //Delete Category
     const deleteCategory = (item) => {
         const data = {
-            id: item._id
+            id: item._id,
+            categoryName: item.categoryName
         }
         axios.delete("/deleteCategory", { data });
 
         getCategory();
+        getProduct();
     }
 
     //Delete Product
@@ -145,6 +146,27 @@ const Home = () => {
         getCategory();
     }
 
+    //Pagination
+    const pagination = (type) => {
+
+        if(type === "prev"){
+            if(pageNumber === 0){
+                setPageNumber(1)
+            }
+            else{
+                setPageNumber(pageNumber-1);
+            }
+        }
+        else if(type === "next"){
+            if (Math.ceil(total / size) === pageNumber) {
+                setPageNumber(pageNumber)
+            }
+            else{
+                setPageNumber(pageNumber+1);
+            }
+        }
+    }
+
     //Update product
     const [productName, setProductName] = useState([]);
     const switchUpdateProduct  = (item) => {
@@ -164,32 +186,29 @@ const Home = () => {
         getProduct();
     }
 
-    //Product Display
+    //Product Display according to category
     const [newData, setNewData] = useState([]);
 
     const productDisplay = (item) => {        
         let categoryItem = item.categoryName;
-        console.log(categoryItem);
 
         let tempProductDisplay = product.filter((values) => {
-            console.log(values);
             if(values.categoryName === categoryItem){
                 return values;
             }
             else{
-                return null;
+                return "";
             }
         })
         setNewData(tempProductDisplay);
     }
-
 
     return (
         <Router>
             <Navbar />
             <Switch>
                 <Route exact path="/">
-                    <LandingPage newData={newData} productDisplay={productDisplay} switchUpdateProduct={switchUpdateProduct} switchUpdateCategory={switchUpdateCategory} getProduct={getProduct} deleteProduct={deleteProduct} deleteCategory={deleteCategory} product={product} category={category} />
+                    <LandingPage  pagination={pagination} newData={newData} productDisplay={productDisplay} switchUpdateProduct={switchUpdateProduct} switchUpdateCategory={switchUpdateCategory} getProduct={getProduct} deleteProduct={deleteProduct} deleteCategory={deleteCategory} product={product} category={category} />
                 </Route>
                 <Route exact path="/category">
                     <Category inputList={inputList} addCategories={addCategories} category={category} setCategory={setCategory} setInputList={setInputList} inputList={inputList} />
@@ -198,7 +217,7 @@ const Home = () => {
                     <Products addProduct={addProduct} setProduct={setProduct} setProductInput={setProductInput} productInput={productInput} category={category} />
                 </Route>
                 <Route path="/updateCategory">
-                    <UpdateCategory setUpdateCategoryInput={setUpdateCategoryInput} updateCategory={updateCategory}/>
+                    <UpdateCategory setUpdateCategoryInput={setUpdateCategoryInput} updateCategoryInput={updateCategoryInput} updateCategory={updateCategory}/>
                 </Route>
                 <Route path="/updateProduct">
                     <UpdateProduct category={category} updateProduct={updateProduct} updateProductInput={updateProductInput} setUpdateProductInput={setUpdateProductInput}/>

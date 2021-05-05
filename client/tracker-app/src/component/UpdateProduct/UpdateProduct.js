@@ -5,7 +5,7 @@ const UpdateProduct = ({category, updateProduct, setUpdateProductInput, updatePr
     const handleSubmit = (e) => {
         e.preventDefault();
         updateProduct();
-        console.log(updateProductInput);
+        setUpdateProductInput({categoryName: "", productName: ""})
     }
 
     const handleChange = (e) => {
@@ -22,7 +22,7 @@ const UpdateProduct = ({category, updateProduct, setUpdateProductInput, updatePr
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label>Select Category :- </label>
-                        <select style={{padding: "3px 16px"}} name="categoryName" onChange={handleChange}>
+                        <select style={{padding: "3px 16px"}} value={updateProductInput.categoryName} name="categoryName" onChange={handleChange}>
                             {category.map((item) => {
                                 return(
                                     <option id="categoryName">{item.categoryName}</option>
@@ -32,7 +32,7 @@ const UpdateProduct = ({category, updateProduct, setUpdateProductInput, updatePr
                     </div>
                     <div class="form-group">
                         <label>Product Name :-</label>
-                        <input type="text" className="form-control" onChange={handleChange} name="productName" placeholder="Product name"/>
+                        <input type="text" value={updateProductInput.productName} className="form-control" onChange={handleChange} name="productName" placeholder="Product name"/>
                     </div>
                     <button type="submit" className="btn btn-primary">Update Product</button>
                 </form>
