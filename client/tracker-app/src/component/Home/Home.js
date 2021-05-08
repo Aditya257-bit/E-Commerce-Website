@@ -153,7 +153,7 @@ const Home = () => {
     const pagination = (type) => {
 
         if(type === "prev"){
-            if(pageNumber === 0){
+            if(pageNumber === 1){
                 setPageNumber(1)
             }
             else{
@@ -212,7 +212,7 @@ const Home = () => {
             <Navbar />
             <Switch>
                 <Route exact path="/">
-                    <LandingPage pagination={pagination} newData={newData} productDisplay={productDisplay} switchUpdateProduct={switchUpdateProduct} switchUpdateCategory={switchUpdateCategory} getProduct={getProduct} deleteProduct={deleteProduct} deleteCategory={deleteCategory} product={product} category={category} />
+                    <LandingPage pageNumber={pageNumber} pagination={pagination} newData={newData} productDisplay={productDisplay} switchUpdateProduct={switchUpdateProduct} switchUpdateCategory={switchUpdateCategory} getProduct={getProduct} deleteProduct={deleteProduct} deleteCategory={deleteCategory} product={product} category={category} />
                 </Route>
                 <Route exact path="/category">
                     <Category inputList={inputList} addCategories={addCategories} category={category} setCategory={setCategory} setInputList={setInputList} inputList={inputList} />

@@ -4,7 +4,6 @@ import "./AllProducts.css";
 
 const AllProducts = ({ product, deleteProduct, newData, switchUpdateProduct }) => {
 
-    console.log(newData);
     let data = "";
 
     if(newData.length !== 0){

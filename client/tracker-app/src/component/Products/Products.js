@@ -27,6 +27,7 @@ const Products = ({ category, addProduct, setProduct, setProductInput, productIn
                     <div>
                         <label>Select Category :- </label>
                         <select style={{padding: "3px 16px"}} value={productInput.categoryName} name="categoryName" onChange={handleChange}>
+                            <option>Choose One</option>
                             {category.map((item) => {
                                 return(
                                     <option id="categoryName">{item.categoryName}</option>

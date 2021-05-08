@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./LandingPage.css";
 import AllProducts from '../AllProducts/AllProducts';
 
-const LandingPage = ({pagination, pages, product, category, deleteCategory, deleteProduct, switchUpdateCategory, productDisplay, newData, switchUpdateProduct }) => {
+const LandingPage = ({pagination, pages, pageNumber, product, category, deleteCategory, deleteProduct, switchUpdateCategory, productDisplay, newData, switchUpdateProduct }) => {
 
     // console.log(newData);
 
@@ -13,6 +13,7 @@ const LandingPage = ({pagination, pages, product, category, deleteCategory, dele
             <div style={{textAlign: "right", margin: "10px 15px"}}>
                 <button className="btn btn-primary mx-3 px-3" onClick={() => pagination("prev")}>Prev</button>
                 <button className="btn btn-primary px-3" onClick={() => pagination("next")}>Next</button>
+                <h5 className="mr-4 mt-3">Page:- {pageNumber}</h5>
             </div>
             <div className="row">
                 <div className="col-4">
